@@ -40,6 +40,92 @@
     color: #bbb;
   }
 
+  /* Config section */
+  .config-section {
+    background-color: #1e1e27;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  .config-section h3 {
+    margin-top: 0;
+    color: #4ade80;
+  }
+  .config-form {
+    display: grid;
+    gap: 15px;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  .form-group label {
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #ccc;
+  }
+  .form-group input {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #44444d;
+    background-color: #292933;
+    color: #eee;
+    font-size: 14px;
+  }
+  .config-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  .btn-primary {
+    background-color: #4ade80;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+  }
+  .btn-primary:hover {
+    background-color: #22c55e;
+  }
+  .btn-secondary {
+    background-color: #44444d;
+    color: #ccc;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+  }
+  .btn-secondary:hover {
+    background-color: #5a5a68;
+    color: white;
+  }
+
+  /* Status indicators */
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 500;
+  }
+  .status.connected {
+    background-color: rgba(74, 222, 128, 0.2);
+    color: #4ade80;
+  }
+  .status.disconnected {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+  }
+  .status.loading {
+    background-color: rgba(251, 191, 36, 0.2);
+    color: #fbbf24;
+  }
+
   /* Buttons grid */
   .buttons-grid {
     display: grid;
@@ -51,32 +137,57 @@
     background-color: #292933;
     border: none;
     color: #ccc;
-    padding: 8px 12px;
+    padding: 12px 16px;
     border-radius: 4px;
     font-weight: 600;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
+    position: relative;
   }
-  .buttons-grid button:hover {
+  .buttons-grid button:hover:not(:disabled) {
     background-color: #44444d;
     color: white;
+    transform: translateY(-1px);
+  }
+  .buttons-grid button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   /* Search */
   .search-wrapper {
     margin-bottom: 20px;
+    position: relative;
   }
   input[type="search"] {
     width: 100%;
-    padding: 8px 12px;
-    border-radius: 4px;
-    border: none;
+    padding: 12px 16px;
+    border-radius: 6px;
+    border: 1px solid #44444d;
     background-color: #292933;
     color: #eee;
     font-size: 16px;
     outline-offset: 2px;
+    transition: border-color 0.2s ease;
+  }
+  input[type="search"]:focus {
+    border-color: #4ade80;
   }
   input[type="search"]::placeholder {
     color: #666;
+  }
+
+  /* Loading spinner */
+  .loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #44444d;
+    border-radius: 50%;
+    border-top-color: #4ade80;
+    animation: spin 1s ease-in-out infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
   }
 
   /* Citizen card */
@@ -84,25 +195,34 @@
     display: flex;
     align-items: center;
     background-color: #1e1e27;
-    border-radius: 5px;
-    padding: 10px 15px;
+    border-radius: 8px;
+    padding: 15px;
     margin-bottom: 12px;
+    border: 1px solid #2a2a35;
+    transition: all 0.2s ease;
   }
+  .citizen-card:hover {
+    border-color: #44444d;
+    transform: translateY(-1px);
+  }
+  
   .citizen-avatar {
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     background-color: #45454f;
     border-radius: 50%;
     margin-right: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
   }
   .citizen-avatar svg {
     width: 24px;
     height: 24px;
     stroke: #7a7a7a;
   }
+  
   .citizen-info {
     flex-grow: 1;
   }
@@ -111,67 +231,311 @@
     font-size: 16px;
     margin-bottom: 4px;
   }
+  .citizen-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
   .citizen-ssn {
     font-size: 13px;
     color: #999;
   }
+  .citizen-dob {
+    font-size: 13px;
+    color: #999;
+  }
+  
   .view-button {
     background-color: #44444d;
     border: none;
-    padding: 6px 12px;
+    padding: 8px 16px;
     border-radius: 4px;
     font-size: 13px;
     color: #ccc;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
+    font-weight: 500;
   }
   .view-button:hover {
     background-color: #5a5a68;
     color: white;
+    transform: translateY(-1px);
+  }
+
+  /* Messages */
+  .message {
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    font-weight: 500;
+  }
+  .message.error {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+  }
+  .message.success {
+    background-color: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.3);
+  }
+  .message.info {
+    background-color: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .buttons-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .citizen-card {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .citizen-info {
+      width: 100%;
+    }
+    .view-button {
+      align-self: flex-end;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .buttons-grid {
+      grid-template-columns: 1fr;
+    }
+    .config-actions {
+      flex-direction: column;
+    }
   }
 </style>
 </head>
 <body>
   <div class="container">
     <h1>Citizens</h1>
-    <div class="aop">AOP: TEST AOP CHANGE</div>
+    <div class="aop">AOP: <span id="aop-status">Loading...</span></div>
 
-    <div class="buttons-grid">
-      <button>Create Citizen</button>
-      <button>Register Vehicle</button>
-      <button>Register Weapon</button>
-      <button>Create Tow Call</button>
-      <button>Create Taxi Call</button>
-      <button>Create 911 Call</button>
+    <!-- Configuration Section -->
+    <div class="config-section" id="config-section">
+      <h3>🔧 SnailyCAD API Configuration</h3>
+      <div class="config-form">
+        <div class="form-group">
+          <label for="api-url">API Base URL</label>
+          <input type="url" id="api-url" placeholder="https:/api.americanroleplay.net/api/v1" />
+        </div>
+        <div class="form-group">
+          <label for="api-token">API Token</label>
+          <input type="password" id="api-token" placeholder="sng__fS3cKd6P4azPPnVgxlNqPSpbYXcClGtinkiSpd_1p_qO0y9epoId0Qa" />
+        </div>
+      </div>
+      <div class="config-actions">
+        <button class="btn-primary" onclick="connectAPI()">Connect to API</button>
+        <button class="btn-secondary" onclick="toggleConfig()">Hide Config</button>
+      </div>
     </div>
 
-    <div class="search-wrapper">
-      <input type="search" id="search" placeholder="Search" />
+    <!-- Connection Status -->
+    <div id="connection-status" class="message info" style="display: none;">
+      <span class="status loading">
+        <span class="loading-spinner"></span> Connecting...
+      </span>
     </div>
 
-    <div id="citizens-list">
-      <!-- Citizen cards get rendered here -->
+    <!-- Main Interface -->
+    <div id="main-interface" style="display: none;">
+      <div class="buttons-grid">
+        <button onclick="createCitizen()" disabled>Create Citizen</button>
+        <button onclick="registerVehicle()" disabled>Register Vehicle</button>
+        <button onclick="registerWeapon()" disabled>Register Weapon</button>
+        <button onclick="createTowCall()" disabled>Create Tow Call</button>
+        <button onclick="createTaxiCall()" disabled>Create Taxi Call</button>
+        <button onclick="create911Call()" disabled>Create 911 Call</button>
+      </div>
+
+      <div class="search-wrapper">
+        <input type="search" id="search" placeholder="Search citizens by name, SSN..." />
+      </div>
+
+      <div id="loading-message" class="message info" style="display: none;">
+        <span class="loading-spinner"></span> Loading citizens...
+      </div>
+
+      <div id="error-message" class="message error" style="display: none;"></div>
+
+      <div id="citizens-list">
+        <!-- Citizen cards get rendered here -->
+      </div>
     </div>
   </div>
 
   <script>
-    // Sample data — you can replace this with your API call data
-    const citizens = [
-      { id: 1, name: "West Sam", ssn: "711308278" },
-      { id: 2, name: "Jane Doe", ssn: "123456789" },
-      { id: 3, name: "John Smith", ssn: "987654321" },
-      { id: 4, name: "Alice Johnson", ssn: "456123789" }
-    ];
+    // Configuration
+    let config = {
+      apiUrl: '',
+      apiToken: '',
+      connected: false
+    };
 
-    const citizensListEl = document.getElementById("citizens-list");
-    const searchInput = document.getElementById("search");
+    let citizens = [];
+    let filteredCitizens = [];
 
-    // Function to render citizens based on filter
-    function renderCitizens(filter = "") {
-      const filtered = citizens.filter(citizen =>
-        citizen.name.toLowerCase().includes(filter.toLowerCase())
-      );
+    // DOM elements
+    const configSection = document.getElementById('config-section');
+    const connectionStatus = document.getElementById('connection-status');
+    const mainInterface = document.getElementById('main-interface');
+    const citizensListEl = document.getElementById('citizens-list');
+    const searchInput = document.getElementById('search');
+    const loadingMessage = document.getElementById('loading-message');
+    const errorMessage = document.getElementById('error-message');
+    const aopStatus = document.getElementById('aop-status');
 
-      citizensListEl.innerHTML = filtered.map(citizen => `
+    // Load saved configuration
+    function loadConfig() {
+      const saved = localStorage.getItem('snailycad-config');
+      if (saved) {
+        const savedConfig = JSON.parse(saved);
+        document.getElementById('api-url').value = savedConfig.apiUrl || '';
+        document.getElementById('api-token').value = savedConfig.apiToken || '';
+      }
+    }
+
+    // Save configuration
+    function saveConfig() {
+      const configData = {
+        apiUrl: config.apiUrl,
+        apiToken: config.apiToken
+      };
+      localStorage.setItem('snailycad-config', JSON.stringify(configData));
+    }
+
+    // Toggle configuration visibility
+    function toggleConfig() {
+      const isHidden = configSection.style.display === 'none';
+      configSection.style.display = isHidden ? 'block' : 'none';
+    }
+
+    // Connect to API
+    async function connectAPI() {
+      const apiUrl = document.getElementById('api-url').value.trim();
+      const apiToken = document.getElementById('api-token').value.trim();
+
+      if (!apiUrl || !apiToken) {
+        showError('Please enter both API URL and token');
+        return;
+      }
+
+      config.apiUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
+      config.apiToken = apiToken;
+
+      showConnectionStatus('Connecting to SnailyCAD API...');
+
+      try {
+        // Test connection by fetching citizens
+        const response = await fetch(`${config.apiUrl}/citizen`, {
+          headers: {
+            'Authorization': `Bearer ${config.apiToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`API Error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        
+        config.connected = true;
+        saveConfig();
+        
+        showSuccess('Connected to SnailyCAD API successfully!');
+        configSection.style.display = 'none';
+        mainInterface.style.display = 'block';
+        
+        // Enable buttons
+        document.querySelectorAll('.buttons-grid button').forEach(btn => {
+          btn.disabled = false;
+        });
+
+        // Load citizens
+        await loadCitizens();
+        
+        // Load CAD info
+        await loadCADInfo();
+
+      } catch (error) {
+        console.error('Connection error:', error);
+        showError(`Failed to connect: ${error.message}`);
+        config.connected = false;
+      }
+
+      hideConnectionStatus();
+    }
+
+    // Load CAD information
+    async function loadCADInfo() {
+      try {
+        const response = await fetch(`${config.apiUrl}/admin/manage/cad-settings`, {
+          headers: {
+            'Authorization': `Bearer ${config.apiToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          aopStatus.textContent = data.aop || 'Unknown';
+        } else {
+          aopStatus.textContent = 'Connected';
+        }
+      } catch (error) {
+        console.error('Failed to load CAD info:', error);
+        aopStatus.textContent = 'Connected';
+      }
+    }
+
+    // Load citizens from API
+    async function loadCitizens() {
+      if (!config.connected) return;
+
+      showLoading();
+      hideError();
+
+      try {
+        const response = await fetch(`${config.apiUrl}/citizen`, {
+          headers: {
+            'Authorization': `Bearer ${config.apiToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch citizens: ${response.status}`);
+        }
+
+        const data = await response.json();
+        citizens = Array.isArray(data) ? data : (data.citizens || []);
+        filteredCitizens = [...citizens];
+        
+        renderCitizens();
+        
+      } catch (error) {
+        console.error('Error loading citizens:', error);
+        showError(`Failed to load citizens: ${error.message}`);
+      }
+
+      hideLoading();
+    }
+
+    // Render citizens
+    function renderCitizens() {
+      if (filteredCitizens.length === 0) {
+        citizensListEl.innerHTML = '<p style="color:#888; text-align: center; padding: 40px;">No citizens found.</p>';
+        return;
+      }
+
+      citizensListEl.innerHTML = filteredCitizens.map(citizen => `
         <div class="citizen-card">
           <div class="citizen-avatar" aria-hidden="true">
             <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
@@ -180,24 +544,133 @@
             </svg>
           </div>
           <div class="citizen-info">
-            <div class="citizen-name">${citizen.name}</div>
-            <div class="citizen-ssn">SSN: ${citizen.ssn}</div>
+            <div class="citizen-name">${escapeHtml(citizen.name || 'Unknown')}</div>
+            <div class="citizen-details">
+              <div class="citizen-ssn">SSN: ${escapeHtml(citizen.socialSecurityNumber || 'N/A')}</div>
+              ${citizen.dateOfBirth ? `<div class="citizen-dob">DOB: ${formatDate(citizen.dateOfBirth)}</div>` : ''}
+            </div>
           </div>
-          <button class="view-button" onclick="alert('View Citizen: ${citizen.name}')">View Citizen</button>
+          <button class="view-button" onclick="viewCitizen('${citizen.id}')">View Citizen</button>
         </div>
-      `).join("");
+      `).join('');
+    }
 
-      if (filtered.length === 0) {
-        citizensListEl.innerHTML = "<p style='color:#888'>No citizens found.</p>";
+    // Search functionality
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      
+      if (!query) {
+        filteredCitizens = [...citizens];
+      } else {
+        filteredCitizens = citizens.filter(citizen => 
+          (citizen.name || '').toLowerCase().includes(query) ||
+          (citizen.socialSecurityNumber || '').includes(query)
+        );
+      }
+      
+      renderCitizens();
+    });
+
+    // Utility functions
+    function escapeHtml(unsafe) {
+      return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function formatDate(dateString) {
+      try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString();
+      } catch {
+        return dateString;
       }
     }
 
-    // Initial render
-    renderCitizens();
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.style.display = 'block';
+    }
 
-    // Search input live filtering
-    searchInput.addEventListener("input", (e) => {
-      renderCitizens(e.target.value);
+    function hideError() {
+      errorMessage.style.display = 'none';
+    }
+
+    function showSuccess(message) {
+      const successEl = document.createElement('div');
+      successEl.className = 'message success';
+      successEl.textContent = message;
+      document.querySelector('.container').insertBefore(successEl, mainInterface);
+      
+      setTimeout(() => successEl.remove(), 5000);
+    }
+
+    function showLoading() {
+      loadingMessage.style.display = 'block';
+      citizensListEl.style.opacity = '0.5';
+    }
+
+    function hideLoading() {
+      loadingMessage.style.display = 'none';
+      citizensListEl.style.opacity = '1';
+    }
+
+    function showConnectionStatus(message) {
+      connectionStatus.querySelector('.status').innerHTML = `<span class="loading-spinner"></span> ${message}`;
+      connectionStatus.style.display = 'block';
+    }
+
+    function hideConnectionStatus() {
+      connectionStatus.style.display = 'none';
+    }
+
+    // Action functions (placeholder implementations)
+    function viewCitizen(citizenId) {
+      alert(`View Citizen: ${citizenId}\n\nThis would open the citizen details page.`);
+    }
+
+    function createCitizen() {
+      alert('Create Citizen functionality would be implemented here');
+    }
+
+    function registerVehicle() {
+      alert('Register Vehicle functionality would be implemented here');
+    }
+
+    function registerWeapon() {
+      alert('Register Weapon functionality would be implemented here');
+    }
+
+    function createTowCall() {
+      alert('Create Tow Call functionality would be implemented here');
+    }
+
+    function createTaxiCall() {
+      alert('Create Taxi Call functionality would be implemented here');
+    }
+
+    function create911Call() {
+      alert('Create 911 Call functionality would be implemented here');
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      loadConfig();
+      
+      // Auto-connect if config exists
+      const saved = localStorage.getItem('snailycad-config');
+      if (saved) {
+        const savedConfig = JSON.parse(saved);
+        if (savedConfig.apiUrl && savedConfig.apiToken) {
+          document.getElementById('api-url').value = savedConfig.apiUrl;
+          document.getElementById('api-token').value = savedConfig.apiToken;
+          // You can uncomment the next line to auto-connect
+          // connectAPI();
+        }
+      }
     });
   </script>
 </body>
