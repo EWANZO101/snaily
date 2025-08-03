@@ -323,16 +323,35 @@
       <div class="config-form">
         <div class="form-group">
           <label for="api-url">API Base URL</label>
-          <input type="url" id="api-url" placeholder="https:/api.americanroleplay.net/api/v1" />
+          <input type="url" id="api-url" placeholder="https://your-snailycad-instance.com/api/v1" />
+          <small style="color: #888; font-size: 12px; margin-top: 4px; display: block;">
+            Common formats: <br>
+            • https://your-domain.com/api/v1 <br>
+            • https://cad.your-domain.com/api/v1 <br>
+            • http://localhost:3000/api/v1 (for local dev)
+          </small>
         </div>
         <div class="form-group">
           <label for="api-token">API Token</label>
-          <input type="password" id="api-token" placeholder="wfkapfkapfkpakoq8648q1648618" />
+          <input type="password" id="api-token" placeholder="Your SnailyCAD API token" />
+          <small style="color: #888; font-size: 12px; margin-top: 4px; display: block;">
+            Get this from SnailyCAD Admin → Manage → API Tokens
+          </small>
         </div>
       </div>
       <div class="config-actions">
         <button class="btn-primary" onclick="connectAPI()">Connect to API</button>
         <button class="btn-secondary" onclick="toggleConfig()">Hide Config</button>
+        <button class="btn-secondary" onclick="toggleDebugMode()">Toggle Debug</button>
+      </div>
+      
+      <!-- Debug Section -->
+      <div id="debug-section" style="display: none; margin-top: 20px; background: #0f0f0f; padding: 15px; border-radius: 4px; border-left: 4px solid #fbbf24;">
+        <h4 style="margin: 0 0 10px 0; color: #fbbf24;">Debug Console</h4>
+        <div id="debug-output" style="font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; background: #000; padding: 10px; border-radius: 4px;">
+          Click "Connect to API" to see debug information...
+        </div>
+        <button style="margin-top: 10px; background: #44444d; border: none; color: #ccc; padding: 4px 8px; border-radius: 4px; font-size: 12px;" onclick="clearDebug()">Clear</button>
       </div>
     </div>
 
@@ -380,6 +399,7 @@
 
     let citizens = [];
     let filteredCitizens = [];
+    let debugMode = false;
 
     // DOM elements
     const configSection = document.getElementById('config-section');
@@ -390,6 +410,80 @@
     const loadingMessage = document.getElementById('loading-message');
     const errorMessage = document.getElementById('error-message');
     const aopStatus = document.getElementById('aop-status');
+
+    // Debug functions
+    function debugLog(message, data = null) {
+      const timestamp = new Date().toLocaleTimeString();
+      const logMessage = `[${timestamp}] ${message}`;
+      
+      console.log(logMessage, data || '');
+      
+      if (debugMode) {
+        const debugOutput = document.getElementById('debug-output');
+        if (debugOutput) {
+          const logElement = document.createElement('div');
+          logElement.style.marginBottom = '4px';
+          logElement.style.color = '#4ade80';
+          logElement.textContent = logMessage;
+          
+          if (data) {
+            const dataElement = document.createElement('div');
+            dataElement.style.marginLeft = '10px';
+            dataElement.style.color = '#ccc';
+            dataElement.textContent = JSON.stringify(data, null, 2);
+            logElement.appendChild(dataElement);
+          }
+          
+          debugOutput.appendChild(logElement);
+          debugOutput.scrollTop = debugOutput.scrollHeight;
+        }
+      }
+    }
+
+    function debugError(message, error = null) {
+      const timestamp = new Date().toLocaleTimeString();
+      const logMessage = `[${timestamp}] ERROR: ${message}`;
+      
+      console.error(logMessage, error || '');
+      
+      if (debugMode) {
+        const debugOutput = document.getElementById('debug-output');
+        if (debugOutput) {
+          const logElement = document.createElement('div');
+          logElement.style.marginBottom = '4px';
+          logElement.style.color = '#ef4444';
+          logElement.textContent = logMessage;
+          
+          if (error) {
+            const dataElement = document.createElement('div');
+            dataElement.style.marginLeft = '10px';
+            dataElement.style.color = '#fca5a5';
+            dataElement.textContent = error.toString();
+            logElement.appendChild(dataElement);
+          }
+          
+          debugOutput.appendChild(logElement);
+          debugOutput.scrollTop = debugOutput.scrollHeight;
+        }
+      }
+    }
+
+    function toggleDebugMode() {
+      debugMode = !debugMode;
+      const debugSection = document.getElementById('debug-section');
+      debugSection.style.display = debugMode ? 'block' : 'none';
+      
+      if (debugMode) {
+        debugLog('Debug mode enabled');
+      }
+    }
+
+    function clearDebug() {
+      const debugOutput = document.getElementById('debug-output');
+      if (debugOutput) {
+        debugOutput.innerHTML = 'Debug console cleared...';
+      }
+    }
 
     // Load saved configuration
     function loadConfig() {
@@ -418,33 +512,78 @@
 
     // Connect to API
     async function connectAPI() {
+      debugLog('Connect button clicked');
+      
       const apiUrl = document.getElementById('api-url').value.trim();
       const apiToken = document.getElementById('api-token').value.trim();
+
+      debugLog('API URL:', apiUrl);
+      debugLog('API Token length:', apiToken.length);
 
       if (!apiUrl || !apiToken) {
         showError('Please enter both API URL and token');
         return;
       }
 
+      // Clean up API URL
       config.apiUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
       config.apiToken = apiToken;
 
       showConnectionStatus('Connecting to SnailyCAD API...');
 
       try {
-        // Test connection by fetching citizens
-        const response = await fetch(`${config.apiUrl}/citizen`, {
+        // First, let's try to get CAD info (usually more accessible)
+        debugLog('Testing connection to:', `${config.apiUrl}/admin/manage/cad-settings`);
+        
+        let testEndpoint = `${config.apiUrl}/admin/manage/cad-settings`;
+        let response = await fetch(testEndpoint, {
+          method: 'GET',
           headers: {
             'Authorization': `Bearer ${config.apiToken}`,
             'Content-Type': 'application/json'
           }
         });
 
+        debugLog('Response status:', response.status);
+        debugLog('Response headers:', [...response.headers.entries()]);
+
+        // If CAD settings fails, try a simpler endpoint
         if (!response.ok) {
-          throw new Error(`API Error: ${response.status} ${response.statusText}`);
+          debugLog('CAD settings failed, trying citizen endpoint...');
+          testEndpoint = `${config.apiUrl}/citizen`;
+          response = await fetch(testEndpoint, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${config.apiToken}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          debugLog('Citizen endpoint status:', response.status);
+        }
+
+        // If still failing, try without Bearer prefix (some APIs don't use it)
+        if (!response.ok) {
+          debugLog('Trying without Bearer prefix...');
+          response = await fetch(`${config.apiUrl}/citizen`, {
+            method: 'GET',
+            headers: {
+              'Authorization': config.apiToken,
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          debugLog('No Bearer status:', response.status);
+        }
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          debugError('Error response:', errorText);
+          throw new Error(`API Error: ${response.status} ${response.statusText}${errorText ? ' - ' + errorText : ''}`);
         }
 
         const data = await response.json();
+        debugLog('Success! Response data:', data);
         
         config.connected = true;
         saveConfig();
@@ -465,8 +604,23 @@
         await loadCADInfo();
 
       } catch (error) {
-        console.error('Connection error:', error);
-        showError(`Failed to connect: ${error.message}`);
+        debugError('Connection error details:', error);
+        
+        // More specific error messages
+        let errorMsg = 'Failed to connect: ';
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+          errorMsg += 'Network error - check your API URL and ensure CORS is enabled';
+        } else if (error.message.includes('401')) {
+          errorMsg += 'Authentication failed - check your API token';
+        } else if (error.message.includes('403')) {
+          errorMsg += 'Access forbidden - your API token may not have the required permissions';
+        } else if (error.message.includes('404')) {
+          errorMsg += 'API endpoint not found - check your SnailyCAD version and API URL format';
+        } else {
+          errorMsg += error.message;
+        }
+        
+        showError(errorMsg);
         config.connected = false;
       }
 
