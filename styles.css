@@ -1,0 +1,20 @@
+/* Flowbite + Tailwind Custom Overrides */
+
+/* Action Button */
+.btn-action {
+  @apply w-full py-2 px-3 text-sm font-medium text-white rounded-lg shadow hover:shadow-md transition;
+}
+
+/* Smooth modal animations */
+#viewCitizenModal {
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Dark theme adjustments */
+body {
+  background-color: #111827; /* Tailwind Gray-900 */
+}
+
+input {
+  transition: all 0.2s ease-in-out;
+}
