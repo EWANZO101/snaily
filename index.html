@@ -4,27 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Citizens | SnailyCAD Theme</title>
-
-  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Flowbite CDN -->
   <script src="https://unpkg.com/flowbite@1.6.5/dist/flowbite.min.js"></script>
-
-  <style>
-    /* Custom styles with Tailwind @apply */
-    .btn-action {
-      @apply w-full py-2 px-3 text-sm font-medium text-white rounded-lg shadow hover:shadow-md transition;
-    }
-    #viewCitizenModal {
-      transition: opacity 0.3s ease-in-out;
-    }
-    body {
-      background-color: #111827; /* Tailwind Gray-900 */
-    }
-    input {
-      transition: all 0.2s ease-in-out;
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="bg-gray-900 text-white">
 
@@ -33,9 +15,14 @@
     <div class="flex items-center justify-between mb-6">
       <div>
         <h2 class="text-3xl font-bold tracking-tight text-white">Citizens</h2>
-        <p class="text-gray-400 text-sm mt-1">AOP: <span class="font-medium text-blue-400">Sandy Shores</span></p>
+        <p class="text-gray-400 text-sm mt-1">
+          AOP:
+          <span class="font-medium text-blue-400">Sandy Shores</span>
+        </p>
       </div>
-      <button class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-500">
+      <button
+        class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-500"
+      >
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
@@ -56,106 +43,64 @@
     <div class="relative mb-6">
       <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
         <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z" />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"
+          />
         </svg>
       </div>
-      <input id="search" type="text" placeholder="Search citizens..."
-        class="block w-full p-3 pl-10 text-sm rounded-lg bg-gray-800 border border-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:outline-none">
+      <input
+        id="search"
+        type="text"
+        placeholder="Search citizens..."
+        class="block w-full p-3 pl-10 text-sm rounded-lg bg-gray-800 border border-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
+      />
     </div>
 
     <!-- Citizen Grid -->
     <div id="citizen-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Citizens will load here -->
+      <!-- Citizens loaded dynamically here -->
     </div>
   </section>
 
   <!-- View Citizen Modal -->
-  <div id="viewCitizenModal" tabindex="-1" class="hidden fixed inset-0 z-50 flex justify-center items-center bg-black/70">
+  <div
+    id="viewCitizenModal"
+    tabindex="-1"
+    class="hidden fixed inset-0 z-50 flex justify-center items-center bg-black/70"
+  >
     <div class="bg-gray-900 rounded-lg shadow-lg w-full max-w-md p-6">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-lg font-semibold text-white" id="citizenName"></h3>
-        <button data-modal-hide="viewCitizenModal" class="text-gray-400 hover:text-gray-200 text-2xl leading-none">&times;</button>
+        <button data-modal-hide="viewCitizenModal" class="text-gray-400 hover:text-gray-200">&times;</button>
       </div>
       <div class="text-sm text-gray-300 space-y-2">
-        <p><span class="font-medium text-white">SSN:</span> <span id="citizenSSN"></span></p>
-        <p><span class="font-medium text-white">DOB:</span> <span id="citizenDOB"></span></p>
-        <p><span class="font-medium text-white">Address:</span> <span id="citizenAddress"></span></p>
+        <p>
+          <span class="font-medium text-white">SSN:</span>
+          <span id="citizenSSN"></span>
+        </p>
+        <p>
+          <span class="font-medium text-white">DOB:</span>
+          <span id="citizenDOB"></span>
+        </p>
+        <p>
+          <span class="font-medium text-white">Address:</span>
+          <span id="citizenAddress"></span>
+        </p>
       </div>
       <div class="mt-6 flex justify-end">
-        <button data-modal-hide="viewCitizenModal" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white">Close</button>
+        <button
+          data-modal-hide="viewCitizenModal"
+          class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white"
+        >
+          Close
+        </button>
       </div>
     </div>
   </div>
 
-  <script>
-    const API_URL = "https://api.americanroleplay.net/api/v1";
-    const TOKEN = "sng__fS3cKd6P4azPPnVgxlNqPSpbYXcClGtinkiSpd_1p_qO0y9epoId0Qa"; // Replace with your actual API key
-
-    // Fetch citizens from SnailyCAD API
-    async function fetchCitizens() {
-      try {
-        const res = await fetch(`${API_URL}/citizen`, {
-          headers: { "Authorization": `Bearer ${TOKEN}` }
-        });
-        if (!res.ok) throw new Error('Failed to fetch citizens');
-        return await res.json();
-      } catch (err) {
-        console.error(err);
-        return [];
-      }
-    }
-
-    // Render citizen cards
-    async function renderCitizens() {
-      const citizens = await fetchCitizens();
-      const container = document.getElementById("citizen-list");
-
-      if (!citizens.length) {
-        container.innerHTML = '<p class="text-gray-400">No citizens found.</p>';
-        return;
-      }
-
-      container.innerHTML = citizens.map(c => `
-        <div class="p-5 bg-gray-800 rounded-lg border border-gray-700 shadow-lg flex flex-col justify-between">
-          <div class="flex items-center space-x-4">
-            <div class="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center">
-              <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M5.121 17.804A13.937 13.937 0 0112 15c2.28 0 4.41.51 6.879 2.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-              </svg>
-            </div>
-            <div>
-              <p class="text-lg font-semibold text-white">${c.name}</p>
-              <p class="text-sm text-gray-400">SSN: ${c.socialSecurityNumber || 'N/A'}</p>
-            </div>
-          </div>
-          <button onclick="viewCitizen('${c.id}', '${c.name}', '${c.socialSecurityNumber}', '${c.dateOfBirth}', '${c.address || 'N/A'}')"
-            class="mt-4 w-full px-3 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm text-white">
-            View Details
-          </button>
-        </div>
-      `).join('');
-    }
-
-    // Show modal with citizen details
-    function viewCitizen(id, name, ssn, dob, address) {
-      document.getElementById("citizenName").innerText = name;
-      document.getElementById("citizenSSN").innerText = ssn;
-      document.getElementById("citizenDOB").innerText = dob;
-      document.getElementById("citizenAddress").innerText = address;
-      document.getElementById("viewCitizenModal").classList.remove("hidden");
-    }
-
-    // Hide modal buttons
-    document.querySelectorAll("[data-modal-hide]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.getElementById("viewCitizenModal").classList.add("hidden");
-      });
-    });
-
-    // Initial render on page load
-    renderCitizens();
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
