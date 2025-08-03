@@ -1,106 +1,204 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Citizens | SnailyCAD Theme</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/flowbite@1.6.5/dist/flowbite.min.js"></script>
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Citizens - American Roleplay</title>
+<style>
+  /* Reset and basics */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121217;
+    color: #fff;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  button {
+    cursor: pointer;
+  }
+
+  /* Container */
+  .container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 0 15px;
+  }
+
+  /* Header */
+  h1 {
+    margin-bottom: 6px;
+  }
+  .aop {
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #bbb;
+  }
+
+  /* Buttons grid */
+  .buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .buttons-grid button {
+    background-color: #292933;
+    border: none;
+    color: #ccc;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+  }
+  .buttons-grid button:hover {
+    background-color: #44444d;
+    color: white;
+  }
+
+  /* Search */
+  .search-wrapper {
+    margin-bottom: 20px;
+  }
+  input[type="search"] {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: none;
+    background-color: #292933;
+    color: #eee;
+    font-size: 16px;
+    outline-offset: 2px;
+  }
+  input[type="search"]::placeholder {
+    color: #666;
+  }
+
+  /* Citizen card */
+  .citizen-card {
+    display: flex;
+    align-items: center;
+    background-color: #1e1e27;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 12px;
+  }
+  .citizen-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: #45454f;
+    border-radius: 50%;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .citizen-avatar svg {
+    width: 24px;
+    height: 24px;
+    stroke: #7a7a7a;
+  }
+  .citizen-info {
+    flex-grow: 1;
+  }
+  .citizen-name {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+  .citizen-ssn {
+    font-size: 13px;
+    color: #999;
+  }
+  .view-button {
+    background-color: #44444d;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #ccc;
+    transition: background-color 0.2s ease;
+  }
+  .view-button:hover {
+    background-color: #5a5a68;
+    color: white;
+  }
+</style>
 </head>
-<body class="bg-gray-900 text-white">
+<body>
+  <div class="container">
+    <h1>Citizens</h1>
+    <div class="aop">AOP: TEST AOP CHANGE</div>
 
-  <section class="p-6 max-w-7xl mx-auto">
-    <!-- Header -->
-    <div class="flex items-center justify-between mb-6">
-      <div>
-        <h2 class="text-3xl font-bold tracking-tight text-white">Citizens</h2>
-        <p class="text-gray-400 text-sm mt-1">
-          AOP:
-          <span class="font-medium text-blue-400">Sandy Shores</span>
-        </p>
-      </div>
-      <button
-        class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-500"
-      >
-        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-        </svg>
-        Create Citizen
-      </button>
+    <div class="buttons-grid">
+      <button>Create Citizen</button>
+      <button>Register Vehicle</button>
+      <button>Register Weapon</button>
+      <button>Create Tow Call</button>
+      <button>Create Taxi Call</button>
+      <button>Create 911 Call</button>
     </div>
 
-    <!-- Action Buttons -->
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
-      <button class="btn-action bg-green-600 hover:bg-green-700">Register Vehicle</button>
-      <button class="btn-action bg-purple-600 hover:bg-purple-700">Register Weapon</button>
-      <button class="btn-action bg-yellow-600 hover:bg-yellow-700">Tow Call</button>
-      <button class="btn-action bg-pink-600 hover:bg-pink-700">Taxi Call</button>
-      <button class="btn-action bg-red-600 hover:bg-red-700">911 Call</button>
+    <div class="search-wrapper">
+      <input type="search" id="search" placeholder="Search" />
     </div>
 
-    <!-- Search -->
-    <div class="relative mb-6">
-      <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"
-          />
-        </svg>
-      </div>
-      <input
-        id="search"
-        type="text"
-        placeholder="Search citizens..."
-        class="block w-full p-3 pl-10 text-sm rounded-lg bg-gray-800 border border-gray-700 text-white focus:ring-2 focus:ring-blue-500 focus:outline-none"
-      />
-    </div>
-
-    <!-- Citizen Grid -->
-    <div id="citizen-list" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Citizens loaded dynamically here -->
-    </div>
-  </section>
-
-  <!-- View Citizen Modal -->
-  <div
-    id="viewCitizenModal"
-    tabindex="-1"
-    class="hidden fixed inset-0 z-50 flex justify-center items-center bg-black/70"
-  >
-    <div class="bg-gray-900 rounded-lg shadow-lg w-full max-w-md p-6">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-lg font-semibold text-white" id="citizenName"></h3>
-        <button data-modal-hide="viewCitizenModal" class="text-gray-400 hover:text-gray-200">&times;</button>
-      </div>
-      <div class="text-sm text-gray-300 space-y-2">
-        <p>
-          <span class="font-medium text-white">SSN:</span>
-          <span id="citizenSSN"></span>
-        </p>
-        <p>
-          <span class="font-medium text-white">DOB:</span>
-          <span id="citizenDOB"></span>
-        </p>
-        <p>
-          <span class="font-medium text-white">Address:</span>
-          <span id="citizenAddress"></span>
-        </p>
-      </div>
-      <div class="mt-6 flex justify-end">
-        <button
-          data-modal-hide="viewCitizenModal"
-          class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white"
-        >
-          Close
-        </button>
-      </div>
+    <div id="citizens-list">
+      <!-- Citizen cards get rendered here -->
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    // Sample data — you can replace this with your API call data
+    const citizens = [
+      { id: 1, name: "West Sam", ssn: "711308278" },
+      { id: 2, name: "Jane Doe", ssn: "123456789" },
+      { id: 3, name: "John Smith", ssn: "987654321" },
+      { id: 4, name: "Alice Johnson", ssn: "456123789" }
+    ];
+
+    const citizensListEl = document.getElementById("citizens-list");
+    const searchInput = document.getElementById("search");
+
+    // Function to render citizens based on filter
+    function renderCitizens(filter = "") {
+      const filtered = citizens.filter(citizen =>
+        citizen.name.toLowerCase().includes(filter.toLowerCase())
+      );
+
+      citizensListEl.innerHTML = filtered.map(citizen => `
+        <div class="citizen-card">
+          <div class="citizen-avatar" aria-hidden="true">
+            <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <path d="M5.121 17.804A13.937 13.937 0 0112 15c2.28 0 4.41.51 6.879 2.804"></path>
+              <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+          </div>
+          <div class="citizen-info">
+            <div class="citizen-name">${citizen.name}</div>
+            <div class="citizen-ssn">SSN: ${citizen.ssn}</div>
+          </div>
+          <button class="view-button" onclick="alert('View Citizen: ${citizen.name}')">View Citizen</button>
+        </div>
+      `).join("");
+
+      if (filtered.length === 0) {
+        citizensListEl.innerHTML = "<p style='color:#888'>No citizens found.</p>";
+      }
+    }
+
+    // Initial render
+    renderCitizens();
+
+    // Search input live filtering
+    searchInput.addEventListener("input", (e) => {
+      renderCitizens(e.target.value);
+    });
+  </script>
 </body>
 </html>
